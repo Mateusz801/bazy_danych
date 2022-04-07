@@ -1,0 +1,112 @@
+--CREATE DATABASE firma;
+
+CREATE SCHEMA rozliczenia
+GO
+
+-- tworzenie tabel
+CREATE TABLE rozliczenia.pracownicy (
+	id_pracownika INT PRIMARY KEY NOT NULL,
+	imie NVARCHAR (30) NOT NULL,
+	nazwisko NVARCHAR (30) NOT NULL,
+	adres NVARCHAR (50) NOT NULL,
+	telefon INT
+	);
+
+CREATE TABLE rozliczenia.godziny (
+	id_godziny INT PRIMARY KEY NOT NULL,
+	"data" DATE NOT NULL,
+	liczba_godzin INT NOT NULL,
+	id_pracownika INT NOT NULL
+	);
+
+CREATE TABLE rozliczenia.pensje (
+	id_pensji INT PRIMARY KEY NOT NULL,
+	stanowisko VARCHAR (20) NOT NULL,
+	kwota DECIMAL NOT NULL,
+	id_premii INT NOT NULL
+	);
+
+CREATE TABLE rozliczenia.premie (
+	id_premii INT PRIMARY KEY NOT NULL,
+	rodzaj NVARCHAR (50),
+	kwota DECIMAL NOT NULL
+	);
+
+	-- dodawanie kluczy obcych
+	ALTER TABLE rozliczenia.godziny
+	ADD FOREIGN KEY (id_pracownika) REFERENCES rozliczenia.pracownicy(id_pracownika);
+
+	ALTER TABLE rozliczenia.pensje
+	ADD FOREIGN KEY (id_premii) REFERENCES rozliczenia.premie(id_premii);
+
+	-- dodawanie rekordów
+	SELECT * FROM rozliczenia.pracownicy;
+
+	INSERT INTO rozliczenia.pracownicy VALUES(0, 'Małgorzata', 'Dąb', 'Kraków, ul. Mickiewicza 31', '543621864');
+	INSERT INTO rozliczenia.pracownicy VALUES(1, 'Dawid', 'Rozenek', 'Kraków, ul. Babicka 5a', '542753826');
+	INSERT INTO rozliczenia.pracownicy VALUES(2, 'Ryszard', 'Romanowski', 'Kraków, ul. Rysia 3', '543513634');
+	INSERT INTO rozliczenia.pracownicy VALUES(3, 'Damian', 'Nowy', 'Kraków, ul. Nawoja 5', '456974234');
+	INSERT INTO rozliczenia.pracownicy VALUES(4, 'Dominik', 'Lorak', 'Kraków, ul. Biskupia 43', NULL);
+	INSERT INTO rozliczenia.pracownicy VALUES(5, 'Paweł', 'Domaradz', 'Kraków, ul. Iwonicza 4a', '238456789');
+	INSERT INTO rozliczenia.pracownicy VALUES(6, 'Magdalena', 'Załęcka', 'Kraków, ul. Parkowa 3', NULL);
+	INSERT INTO rozliczenia.pracownicy VALUES(7, 'Brunhilda', 'Średniowieczna', 'Kraków, ul. Rajska 67', '245692126');
+	INSERT INTO rozliczenia.pracownicy VALUES(8, 'Kinga', 'Maślak', 'Kraków, ul. Reagana 45', '247534567');
+	INSERT INTO rozliczenia.pracownicy VALUES(9, 'Ludwik', 'Zebra', 'Kraków, ul. Pawia 43', '764345876');
+
+	SELECT * FROM rozliczenia.godziny;
+
+	INSERT INTO rozliczenia.godziny VALUES(0, '2012-12-12', 7, 0);
+	INSERT INTO rozliczenia.godziny VALUES(1, '2012-12-13', 8, 5);
+	INSERT INTO rozliczenia.godziny VALUES(2, '2012-12-11', 6, 2);
+	INSERT INTO rozliczenia.godziny VALUES(3, '2012-12-10', 7, 3);
+	INSERT INTO rozliczenia.godziny VALUES(4, '2012-12-15', 8, 0);
+	INSERT INTO rozliczenia.godziny VALUES(5, '2012-12-16', 7, 1);
+	INSERT INTO rozliczenia.godziny VALUES(6, '2012-12-15', 9, 9);
+	INSERT INTO rozliczenia.godziny VALUES(7, '2012-12-14', 8, 4);
+	INSERT INTO rozliczenia.godziny VALUES(8, '2012-12-18', 7, 7);
+	INSERT INTO rozliczenia.godziny VALUES(9, '2012-12-19', 8, 8);
+	INSERT INTO rozliczenia.godziny VALUES(10, '2012-12-18', 6, 6);
+	INSERT INTO rozliczenia.godziny VALUES(11, '2012-12-20', 7, 5);
+
+
+	SELECT * FROM rozliczenia.pensje;
+
+	INSERT INTO rozliczenia.pensje VALUES(0, 'księgowy', '2000.00', 5);
+	INSERT INTO rozliczenia.pensje VALUES(1, 'księgowy', '2200.00',7);
+	INSERT INTO rozliczenia.pensje VALUES(2, 'technik', '4000.00', 3);
+	INSERT INTO rozliczenia.pensje VALUES(3, 'technik', '4300.00', 1);
+	INSERT INTO rozliczenia.pensje VALUES(4, 'technik', '4500.00', 8);
+	INSERT INTO rozliczenia.pensje VALUES(5, 'technik-zarządca', '7000.00', 9);
+	INSERT INTO rozliczenia.pensje VALUES(6, 'analityk', '3000.00', 2);
+	INSERT INTO rozliczenia.pensje VALUES(7, 'analityk', '3200.00', 4);
+	INSERT INTO rozliczenia.pensje VALUES(8, 'analityk-zarządca', '6000.00', 6);
+	INSERT INTO rozliczenia.pensje VALUES(9, 'szef oddziału', '10000.00', 0);
+
+
+	SELECT * FROM rozliczenia.premie;
+
+	INSERT INTO rozliczenia.premie VALUES(0, 'szybkie reagowanie', '400.00');
+	INSERT INTO rozliczenia.premie VALUES(1, NULL, '800.00');
+	INSERT INTO rozliczenia.premie VALUES(2, 'pracownik miesiąca', '1000.00');
+	INSERT INTO rozliczenia.premie VALUES(3, NULL, '400.00');
+	INSERT INTO rozliczenia.premie VALUES(4, 'premia kwartalna', '500.00');
+	INSERT INTO rozliczenia.premie VALUES(5, NULL, '3000.00');
+	INSERT INTO rozliczenia.premie VALUES(6, 'premia noworoczna', '500.00');
+	INSERT INTO rozliczenia.premie VALUES(7, 'premia na dzieci', '1000.00');
+	INSERT INTO rozliczenia.premie VALUES(8, NULL, '200.00');
+	INSERT INTO rozliczenia.premie VALUES(9, NULL, '700.00');
+
+	-- 5
+	SELECT nazwisko, adres
+	FROM rozliczenia.pracownicy;
+
+	-- 6
+	SELECT DATEPART(WEEKDAY, data) AS 'Weekday', DATEPART(MONTH, data) AS 'Month'
+	FROM rozliczenia.godziny;
+
+
+	-- 7
+	EXEC sp_rename 'rozliczenia.pensje.kwota', 'kwota_brutto';
+
+	ALTER TABLE rozliczenia.pensje
+	ADD kwota_netto AS (kwota_brutto * 0.73) PERSISTED;
