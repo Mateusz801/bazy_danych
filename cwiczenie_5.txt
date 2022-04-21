@@ -1,0 +1,261 @@
+--CREATE DATABASE firma;
+
+CREATE SCHEMA ksiegowosc;
+GO
+
+-- tworzenie tabel
+--Tabela 'pracownicy', zawierająca podstawowe dane osobowe
+CREATE TABLE ksiegowosc.pracownicy (
+	id_pracownika INT PRIMARY KEY NOT NULL,
+	imie NVARCHAR (30) NOT NULL,
+	nazwisko NVARCHAR (30) NOT NULL,
+	adres NVARCHAR (50) NOT NULL,
+	telefon INT
+	);
+
+--Tabela 'godziny' informuje o ilości przepracowanych przez danego pracownika godzin danego dnia
+CREATE TABLE ksiegowosc.godziny (
+	id_godziny INT PRIMARY KEY NOT NULL,
+	"data" DATE NOT NULL,
+	liczba_godzin INT NOT NULL,
+	id_pracownika INT NOT NULL
+	);
+
+--Tabela zawiera informacje o wysokości pensji na określonych stanowiskach
+CREATE TABLE ksiegowosc.pensja (
+	id_pensji INT PRIMARY KEY NOT NULL,
+	stanowisko VARCHAR (20) NOT NULL,
+	kwota DECIMAL NOT NULL
+	);
+
+--Tabela opisująca rodzaj premii oraz jej wielkość
+CREATE TABLE ksiegowosc.premia (
+	id_premii INT PRIMARY KEY NOT NULL,
+	rodzaj NVARCHAR (50),
+	kwota DECIMAL NOT NULL
+	);
+
+--Tabela łącząca powyższe tabele i mówiąca, kiedy otrzymano wynagrodzenie
+CREATE TABLE ksiegowosc.wynagrodzenia (
+	id_wynagrodzenia INT PRIMARY KEY NOT NULL,
+	"data" DATE NOT NULL,
+	id_pracownika INT NOT NULL,
+	id_godziny INT NOT NULL,
+	id_pensji INT NOT NULL,
+	id_premii INT
+	);
+
+	-- dodawanie kluczy obcych
+	ALTER TABLE ksiegowosc.wynagrodzenia
+	ADD FOREIGN KEY (id_pracownika) REFERENCES ksiegowosc.pracownicy(id_pracownika);
+
+	ALTER TABLE ksiegowosc.godziny
+	ADD FOREIGN KEY (id_godziny) REFERENCES ksiegowosc.godziny(id_godziny);
+
+	ALTER TABLE ksiegowosc.pensja
+	ADD FOREIGN KEY (id_pensji) REFERENCES ksiegowosc.pensja(id_pensji);
+
+	ALTER TABLE ksiegowosc.premia
+	ADD FOREIGN KEY (id_premii) REFERENCES ksiegowosc.premia(id_premii);
+
+	-- dodawanie rekordów
+
+	INSERT INTO ksiegowosc.pracownicy VALUES(0, 'Małgorzata', 'Rozen', 'Kraków, ul. Mickiewicza 31', '543621864');
+	INSERT INTO ksiegowosc.pracownicy VALUES(1, 'Dawid', 'Dąb', 'Kraków, ul. Babicka 5a', '542753826');
+	INSERT INTO ksiegowosc.pracownicy VALUES(2, 'Ryszard', 'Romanowski', 'Kraków, ul. Rysia 3', '543513634');
+	INSERT INTO ksiegowosc.pracownicy VALUES(3, 'Damian', 'Nowy', 'Kraków, ul. Nawoja 5', '456974234');
+	INSERT INTO ksiegowosc.pracownicy VALUES(4, 'Dominik', 'Lorak', 'Kraków, ul. Biskupia 43', NULL);
+	INSERT INTO ksiegowosc.pracownicy VALUES(5, 'Paweł', 'Domaradz', 'Kraków, ul. Iwonicza 4a', '238456789');
+	INSERT INTO ksiegowosc.pracownicy VALUES(6, 'Magdalena', 'Ponal', 'Kraków, ul. Parkowa 3', NULL);
+	INSERT INTO ksiegowosc.pracownicy VALUES(7, 'Brunhilda', 'Średniowieczna', 'Kraków, ul. Rajska 67', '245692126');
+	INSERT INTO ksiegowosc.pracownicy VALUES(8, 'Jagoda', 'Maślak', 'Kraków, ul. Reagana 45', '247534567');
+	INSERT INTO ksiegowosc.pracownicy VALUES(9, 'Ludwik', 'Zebra', 'Kraków, ul. Pawia 43', '764345876');
+
+	SELECT * FROM ksiegowosc.pracownicy;
+
+
+	INSERT INTO ksiegowosc.godziny VALUES(0, '2012-12-12', 7, 0);
+	INSERT INTO ksiegowosc.godziny VALUES(1, '2012-12-13', 8, 5);
+	INSERT INTO ksiegowosc.godziny VALUES(2, '2012-12-11', 6, 2);
+	INSERT INTO ksiegowosc.godziny VALUES(3, '2012-12-10', 7, 3);
+	INSERT INTO ksiegowosc.godziny VALUES(4, '2012-12-15', 8, 0);
+	INSERT INTO ksiegowosc.godziny VALUES(5, '2012-12-16', 7, 1);
+	INSERT INTO ksiegowosc.godziny VALUES(6, '2012-12-15', 9, 9);
+	INSERT INTO ksiegowosc.godziny VALUES(7, '2012-12-14', 8, 4);
+	INSERT INTO ksiegowosc.godziny VALUES(8, '2012-12-18', 7, 7);
+	INSERT INTO ksiegowosc.godziny VALUES(9, '2012-12-19', 8, 8);
+
+	SELECT * FROM ksiegowosc.godziny;
+
+
+	INSERT INTO ksiegowosc.pensja VALUES(0, 'księgowy', '900.00');
+	INSERT INTO ksiegowosc.pensja VALUES(1, 'księgowy', '2200.00');
+	INSERT INTO ksiegowosc.pensja VALUES(2, 'technik', '4000.00');
+	INSERT INTO ksiegowosc.pensja VALUES(3, 'technik', '4000.00');
+	INSERT INTO ksiegowosc.pensja VALUES(4, 'technik', '4000.00');
+	INSERT INTO ksiegowosc.pensja VALUES(5, 'technik-zarządca', '7000.00');
+	INSERT INTO ksiegowosc.pensja VALUES(6, 'analityk', '2500.00');
+	INSERT INTO ksiegowosc.pensja VALUES(7, 'analityk', '3000.00');
+	INSERT INTO ksiegowosc.pensja VALUES(8, 'analityk', '5000.00');
+	INSERT INTO ksiegowosc.pensja VALUES(9, 'szef oddziału', '10000.00');
+
+	SELECT * FROM ksiegowosc.pensja;
+
+
+	INSERT INTO ksiegowosc.premia VALUES(0, 'szybkie reagowanie', '400.00');
+	INSERT INTO ksiegowosc.premia VALUES(1, NULL, '800.00');
+	INSERT INTO ksiegowosc.premia VALUES(2, 'pracownik miesiąca', '1000.00');
+	INSERT INTO ksiegowosc.premia VALUES(3, NULL, '400.00');
+	INSERT INTO ksiegowosc.premia VALUES(4, 'premia kwartalna', '500.00');
+	INSERT INTO ksiegowosc.premia VALUES(5, NULL, '3000.00');
+	INSERT INTO ksiegowosc.premia VALUES(6, 'premia noworoczna', '500.00');
+	INSERT INTO ksiegowosc.premia VALUES(7, 'premia na dzieci', '1000.00');
+	INSERT INTO ksiegowosc.premia VALUES(8, NULL, '200.00');
+	INSERT INTO ksiegowosc.premia VALUES(9, NULL, '700.00');
+
+	SELECT * FROM ksiegowosc.premia;
+
+
+	INSERT INTO ksiegowosc.wynagrodzenia VALUES(0, '2012-12-24', 0, 5, 4, 0);
+	INSERT INTO ksiegowosc.wynagrodzenia VALUES(1, '2012-12-24', 1, 4, 5, 9);
+	INSERT INTO ksiegowosc.wynagrodzenia VALUES(2, '2012-12-24', 2, 3, 6, 1);
+	INSERT INTO ksiegowosc.wynagrodzenia VALUES(3, '2012-12-24', 3, 2, 7, NULL);
+	INSERT INTO ksiegowosc.wynagrodzenia VALUES(4, '2012-12-24', 4, 1, 8, 2);
+	INSERT INTO ksiegowosc.wynagrodzenia VALUES(5, '2012-12-24', 5, 0, 9, 7);
+	INSERT INTO ksiegowosc.wynagrodzenia VALUES(6, '2012-12-24', 6, 9, 3, NULL);
+	INSERT INTO ksiegowosc.wynagrodzenia VALUES(7, '2012-12-24', 7, 8, 2, 6);
+	INSERT INTO ksiegowosc.wynagrodzenia VALUES(8, '2012-12-24', 8, 7, 1, NULL);
+	INSERT INTO ksiegowosc.wynagrodzenia VALUES(9, '2012-12-24', 9, 6, 0, 5);
+
+	SELECT * FROM ksiegowosc.wynagrodzenia;
+
+	--zapytania:
+	--a)
+	SELECT id_pracownika, nazwisko
+	FROM ksiegowosc.pracownicy;
+
+
+	--b) płaca > 1000
+	SELECT pra.id_pracownika, pe.kwota
+	FROM ksiegowosc.pracownicy pra
+	INNER JOIN ksiegowosc.wynagrodzenia w
+	ON pra.id_pracownika = w.id_pracownika
+	INNER JOIN ksiegowosc.pensja pe
+	ON w.id_pensji = pe.id_pensji
+	WHERE pe.kwota > 1000;
+	
+
+	--c) premia NULL, płaca > 2000
+	SELECT pra.id_pracownika, pe.kwota, w.id_premii
+	FROM ksiegowosc.pracownicy pra
+	INNER JOIN ksiegowosc.wynagrodzenia w
+	ON pra.id_pracownika = w.id_pracownika
+	INNER JOIN ksiegowosc.pensja pe
+	ON w.id_pensji = pe.id_pensji
+	WHERE pe.kwota > 2000 AND w.id_premii IS NULL;
+
+
+	--d) imię zaczyna na 'J'
+	SELECT *
+	FROM ksiegowosc.pracownicy
+	WHERE pracownicy.imie LIKE 'J%';
+
+
+	--e) imię kończy na 'a', nazwisko zawiera 'n'
+	SELECT *
+	FROM ksiegowosc.pracownicy
+	WHERE pracownicy.imie LIKE '%a' AND
+	pracownicy.nazwisko LIKE '%n%';
+
+
+	--f) czas pracy > 160h / msc
+	SELECT pra.imie, pra.nazwisko, (g.liczba_godzin * 21 - 160) AS "nadgodziny"
+	FROM ksiegowosc.pracownicy pra
+	INNER JOIN ksiegowosc.wynagrodzenia w
+	ON pra.id_pracownika = w.id_pracownika
+	INNER JOIN ksiegowosc.godziny g
+	ON w.id_godziny = g.id_godziny
+	WHERE (g.liczba_godzin * 21) > 160; 
+
+
+	--g) pensja > 1500 && < 3000
+	SELECT pra.imie, pra.nazwisko, pe.kwota
+	FROM ksiegowosc.pracownicy pra
+	INNER JOIN ksiegowosc.wynagrodzenia w
+	ON pra.id_pracownika = w.id_pracownika
+	INNER JOIN ksiegowosc.pensja pe
+	ON w.id_pensji = pe.id_pensji
+	WHERE pe.kwota BETWEEN 1500 AND 3000;
+
+
+	--h) nadgodziny (f) bez premii
+	SELECT pra.imie, pra.nazwisko, (g.liczba_godzin * 21 - 160) AS "nadgodziny", w.id_premii
+	FROM ksiegowosc.pracownicy pra
+	INNER JOIN ksiegowosc.wynagrodzenia w
+	ON pra.id_pracownika = w.id_pracownika
+	INNER JOIN ksiegowosc.godziny g
+	ON w.id_godziny = g.id_godziny
+	WHERE (g.liczba_godzin * 21) > 160 AND
+	w.id_premii IS NULL;
+
+
+	--i) pracownicy ustawieni wg pensji
+	SELECT pra.imie, pra.nazwisko, pe.kwota
+	FROM ksiegowosc.pracownicy pra
+	INNER JOIN ksiegowosc.wynagrodzenia w
+	ON pra.id_pracownika = w.id_pracownika
+	INNER JOIN ksiegowosc.pensja pe
+	ON w.id_pensji = pe.id_pensji
+	ORDER BY pe.kwota;
+
+
+	--j) -""- i premii malejąco
+	SELECT pra.imie, pra.nazwisko, pe.kwota AS "pensja", pre.kwota AS "premia"
+	FROM ksiegowosc.pracownicy pra
+	INNER JOIN ksiegowosc.wynagrodzenia w
+	ON pra.id_pracownika = w.id_pracownika
+	INNER JOIN ksiegowosc.pensja pe
+	ON w.id_pensji = pe.id_pensji
+	LEFT OUTER JOIN ksiegowosc.premia pre
+	ON w.id_premii = pre.id_premii
+	ORDER BY pe.kwota DESC, pre.kwota DESC;
+
+
+	--k) zlicz i pogrupuj pracowników wg stanowiska
+	SELECT pe.stanowisko, COUNT (*) AS "liczba pracowników"
+	FROM ksiegowosc.pensja pe
+	GROUP BY pe.stanowisko;
+
+
+	--l) śr, min i max płaca dla 1 stanowiska
+	SELECT pe.stanowisko, MIN(pe.kwota) AS "min", MAX (pe.kwota) AS "max", AVG (pe.kwota) AS "avg"
+	FROM ksiegowosc.pensja pe
+	GROUP BY pe.stanowisko
+	HAVING pe.stanowisko = 'księgowy';
+
+
+	--m) suma wynagrodzeń
+	SELECT SUM (pe.kwota) AS "pensje", SUM (pre.kwota) AS "premie"
+	FROM ksiegowosc.wynagrodzenia w
+	INNER JOIN ksiegowosc.pensja pe
+	ON w.id_pensji = pe.id_pensji
+	LEFT OUTER JOIN ksiegowosc.premia pre
+	ON w.id_premii = pre.id_premii
+
+
+	--f1) suma wynagrodzeń wg stanowiska
+	SELECT pe.stanowisko, SUM (pe.kwota) AS "suma"
+	FROM ksiegowosc.pensja pe
+	GROUP BY pe.stanowisko;
+
+
+	--g1) liczba premii dla stanowiska
+	SELECT pe.stanowisko, COUNT (w.id_premii) AS "liczba premii"
+	FROM ksiegowosc.pensja pe
+	INNER JOIN  ksiegowosc.wynagrodzenia w
+	ON pe.id_pensji = w.id_pensji
+	GROUP BY pe.stanowisko;
+
+
+	--h1) usuń pracowników, gdzie pensja < 1200
+	
