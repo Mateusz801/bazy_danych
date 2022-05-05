@@ -1,0 +1,40 @@
+Zad. 1.
+Zależności funkcyjne:
+id_produktu -> nazwa_produktu, cena_produktu, VAT
+nazwa_produktu -> id_produktu, cena_produktu, VAT
+
+id_klienta -> nazwa_klienta, data_zamówienia
+nazwa_klienta -> id_klienta
+
+suma_netto, ilość -> cena_produktu
+suma_brutto, ilość, VAT -> cena_produktu
+
+cena_produktu, suma_netto -> ilość
+cena_produktu, suma_brutto, VAT -> ilość
+
+nazwa_produktu -> VAT
+
+suma_brutto, VAT -> suma_netto
+suma_netto, VAT -> suma_brutto
+
+cena_produktu, ilość -> suma_netto
+cena_produku, ilość, VAT -> suma_brutto
+ 
+
+
+
+Zad. 2.
+Klucze kandydujące:
+id_produktu
+id_klienta
+
+Zad. 3.
+Zależności funkcyjne:
+id_pomieszczenia -> numer_pomieszczenia, powierzchnia, liczba_okien, liczba_drzwi
+id_budynku -> ulica, miasto, kod_pocztowy
+numer_pomieszczenia -> powierzchnia, liczba_okien, liczba_drzwi 
+kod_pocztowy -> miasto
+
+Klucze kandydujące:
+id_pomieszczenia
+id_budynku
