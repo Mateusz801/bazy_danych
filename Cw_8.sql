@@ -1,13 +1,15 @@
 --1
-WITH TempEmployeeInfo (BusinessEntityID, FirtName, MiddleName, LastName, rowguid, Rate, ModDate )
+WITH CteEmployeeInfo (BusinessEntityID, FirtName, MiddleName, LastName, rowguid, Rate, ModDate )
 AS
 (
 	SELECT per.BusinessEntityID, per.FirstName, per. MiddleName, per.LastName, per.rowguid, eph.Rate, eph.ModifiedDate FROM Person.Person per
 	INNER JOIN HumanResources.EmployeePayHistory eph
 	ON per.BusinessEntityID = eph.BusinessEntityID
 )
-SELECT * FROM TempEmployeeInfo
+SELECT * INTO TempEmployeeInfo FROM CteEmployeeInfo
 
+SELECT * FROM TempEmployeeInfo
+ORDER BY BusinessEntityID
 --2
 WITH CompContactRev (CompanyContact, Revenue)
 AS
@@ -23,7 +25,7 @@ SELECT * FROM CompContactRev
 WITH CatSaleValue (Category, SalesValue)
 AS
 (
-	SELECT DISTINCT PC.Name, SUM(SOD.LineTotal) FROM SalesLT.ProductCategory PC
+	SELECT PC.Name, SUM(SOD.LineTotal) FROM SalesLT.ProductCategory PC
 	INNER JOIN SalesLT.Product P
 	ON PC.ProductCategoryID = P.ProductCategoryID
 	INNER JOIN SalesLT.SalesOrderDetail SOD
